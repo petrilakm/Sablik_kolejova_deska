@@ -1,0 +1,27 @@
+\documentclass[a4paper]{report}
+\usepackage[landscape]{geometry}
+\usepackage{graphicx,color}%,fig}
+ \usepackage[czech]{babel}
+\setlength{\textheight}{29cm}
+\setlength{\textwidth}{20cm}
+\pagestyle{empty}
+\setlength{\unitlength}{1mm}
+
+%\newcommand{\ram}{
+\begin{document}
+\begin{picture}(0,0)(50,180)
+%\linethickness{0.1pt}
+%[angle=90]
+
+%\put(-4,28){\framebox(173,248)}
+%\put(-10,10){\mbox{IO\_master -  řídící modul pro kolejovou desku (16. 12. 2022) }}
+
+\put(20,123){\includegraphics[angle=0]{IO_master_nano2_pb.pdf}}
+\put(60,123){\includegraphics[angle=0]{IO_master_nano2_pt.pdf}}
+\put(100,123){\includegraphics[angle=0]{IO_master_nano2_brd.pdf}}
+\put(0,0){\includegraphics[angle=0]{IO_master_nano2_sch.pdf}}
+
+\end{picture}
+
+
+\end{document}

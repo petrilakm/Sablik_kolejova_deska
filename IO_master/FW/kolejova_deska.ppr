@@ -1,0 +1,73 @@
+[Config]
+Compilator.FileName=x:\Michal\Elektronika\Projekty\KMZ\Doplnky\Sablik_kolejova_deska\IO_master\FW\go.cmd
+Compilator.DefaultDir=x:\Michal\Elektronika\Projekty\KMZ\Doplnky\Sablik_kolejova_deska\IO_master\FW
+Compilator.SaveAll=0
+Compilator.Capture=1
+Compilator.ParsLog=%F:%L:%C:* ; gcc
+Compilator.CompileOnBackground=0
+Compilator.ProgSaveAll=0
+Compilator.ProgRunSelection=0
+Compilator.LogType=0
+Compilator.LogEncoding=0
+DefaultCP=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+HTServer=localhost
+[Project tree]
+pult_sablik
+	+FW
+		+inc
+			inc\common_defs.h
+			inc\defines.h
+			inc\inputs.c
+			inc\inputs.h
+			inc\logic.c
+			inc\logic.h
+			inc\sSPI.h
+			inc\sSPI.s
+			inc\timer.c
+			inc\timer.h
+			inc\xn_accessory.c
+			inc\xn_accessory.h
+			inc\xn_stack.c
+			inc\xn_stack.h
+			inc\xpressnet.c
+			inc\xpressnet.h
+		go2.cmd
+		go.cmd
+		kolejova_deska.c
+[Open project files]
+0=kolejova_deska.c
+1=inc\xpressnet.c
+2=inc\xpressnet.h
+3=inc\logic.c
+4=inc\logic.h
+5=inc\inputs.c
+6=inc\inputs.h
+[Selected Project Files]
+Main=
+Selected=inc\logic.c
+[kolejova_deska.c]
+TopLine=56
+Caret=18,115
+[inc\xpressnet.c]
+TopLine=25
+Caret=1,25
+[inc\xpressnet.h]
+TopLine=9
+Caret=20,26
+[inc\logic.c]
+TopLine=59
+Caret=34,78
+[inc\logic.h]
+TopLine=1
+Caret=1,1
+[inc\inputs.c]
+TopLine=103
+Caret=18,122
+[inc\inputs.h]
+TopLine=1
+Caret=1,35

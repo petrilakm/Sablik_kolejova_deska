@@ -1,0 +1,56 @@
+\documentclass[a4paper]{report}
+%\usepackage{graphicx,color}%,fig}
+%\usepackage[czech]{babel}
+\usepackage[top=2cm, bottom=2cm, left = 2cm, right = 2cm]{geometry} 
+\usepackage{tikz}
+%\usepackage{showframe}
+%\setlength{\textheight}{29cm}
+%\setlength{\textwidth}{18cm}
+\setlength{\unitlength}{1mm}
+%\title{Kolejová deska}
+
+\begin{document}
+kolejová deska Výstupy:
+
+\vspace{7cm}
+
+kolejová deska Vstupy:
+
+\newcommand{\jmi}{RPi_SPI_outputs_v04}
+\newcommand{\jmo}{RPi_SPI_inputs_v04}
+
+\vspace{8cm}
+\begin{tikzpicture}
+%\linethickness{0.1pt}
+%[angle=90]
+%\put(0,0){\framebox(100,100)}
+\put(0,90){\includegraphics[angle=0]{\jmi_pt.pdf}}
+\put(60,90){\includegraphics[angle=0]{\jmi_pb.pdf}}
+\put(0,0){\includegraphics[angle=0]{\jmo_pt.pdf}}
+\put(60,0){\includegraphics[angle=0]{\jmo_pb.pdf}}
+\end{tikzpicture}
+%\end{picture}
+
+Výstupy:
+
+1x 100n 1206
+
+1x 0R 1206
+
+2x DIL16 (75HC595)
+
+3x drátová propojka
+
+\vspace{1cm}
+
+Vstupy:
+
+1x 100n 1206
+
+2x DIL16 (75HC165)
+
+2x rezistorová síť 8x10k
+
+4x drátová propojka
+
+\end{document}

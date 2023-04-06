@@ -1,0 +1,41 @@
+new
+open_gerber z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/brd/RPi_SPI_outputs_v03.bot.grb -outname bot
+set_sys excellon_zeros T
+open_excellon z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/brd/RPi_SPI_outputs_v03.exc -outname drl
+
+isolate bot -dia 0.2 -passes 3 -overlap 0.16 -combine 1 -outname iso
+millholes drl -tools 5 -tooldia 2.0 -outname drlmill
+cutout bot -dia 2.0 -margin 0.1 -gapsize 0.5 -gaps 4
+
+drillcncjob
+cncjob iso
+cncjob iso
+
+// merge
+new
+set_sys excellon_zeros T
+open_excellon x:/Michal/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.txt -outname drl1
+open_excellon x:/Michal/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.txt -outname drl2
+offset drl2 0 44
+open_gerber x:/Michal/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.bot -outname bot1
+open_gerber x:/Michal/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.bot -outname bot2
+offset bot2 0 44
+
+
+isolate bot1 -dia 0.2 -passes 4 -overlap 0.16 -combine 1 -outname iso1
+isolate bot2 -dia 0.2 -passes 4 -overlap 0.16 -combine 1 -outname iso2
+join_geometries iso iso1 iso2
+join_excellons drl drl1 drl2
+delete iso1
+delete iso2
+delete drl1
+delete drl2
+millholes drl -tools 10 -tooldia 2.0 -outname drlmill
+millholes drl -tooldia 2.0 -outname drlmill
+cutout bot1 -dia 2.0 -margin 0.1 -gapsize 0.5 -gaps 4
+cutout bot2 -dia 2.0 -margin 0.1 -gapsize 0.5 -gaps 4
+drillcncjob drl -drillz -3 -travelz 1 -feedrate 100 -toolchange True -outname drills.nc
+cncjob iso -z_cut 0.08 -z_move 1.2 -feedrate 100 -tooldia 0.19 -spindlespeed 30000 -multidepth False -outname etch
+export_gcode etch.nc
+write_gcode etch x:/Michal/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/out/etch.nc
+write_gcode drills.nc x:/Michal/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/out/drills.nc

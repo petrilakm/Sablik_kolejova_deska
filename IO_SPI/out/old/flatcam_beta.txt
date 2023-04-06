@@ -1,0 +1,51 @@
+new
+open_gerber z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/brd/RPi_SPI_outputs_v03.bot.grb -outname bot
+set_sys excellon_zeros T
+open_excellon z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/brd/RPi_SPI_outputs_v03.exc -outname drl
+
+isolate bot -dia 0.2 -passes 3 -overlap 0.16 -combine 1 -outname iso
+millholes drl -tools 5 -tooldia 2.0 -outname drlmill
+cutout bot -dia 2.0 -margin 0.1 -gapsize 0.5 -gaps 4
+
+drillcncjob
+cncjob iso
+cncjob iso
+
+// merge
+new
+set_sys excellon_zeros T
+open_excellon z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.txt -outname drl1
+open_excellon z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.txt -outname drl2
+offset drl2 0 44
+join_excellons drl drl1 drl2
+
+open_gerber z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.bot -outname bot1
+open_gerber z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.bot -outname bot2
+offset bot2 0 44
+
+open_gerber z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.out -outname outline1
+open_gerber z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/brd/RPi_SPI_outputs_v04.out -outname outline2
+offset outline2 0 44
+follow outline1 -outname outline_geo1
+follow outline2 -outname outline_geo2
+join_geometry outline outline_geo1 outline_geo2 
+cncjob outline -z_cut -2.6 -z_move 1.2 -feedrate 100 -feedrate_z 60 -dia 2 -spindlespeed 30000 -outname holes
+
+isolate bot1 -dia 0.18 -passes 4 -overlap 5 -combine 1 -outname iso1
+isolate bot2 -dia 0.18 -passes 4 -overlap 5 -combine 1 -outname iso2
+join_geometries iso iso1 iso2
+
+milldrills drl -milled_dias 3.2 -tooldia 2.0 -diatol 50 -outname drlmill
+millholes drl -tooldia 2.0 -outname drlmill
+
+cutout outline_geo -dia 2.0 -margin 0.1 -gapsize 0.5 -gaps lr -outname out1
+cutout outline_geo2 -dia 2.0 -margin 0.1 -gapsize 0.5 -gaps lr -outname out2
+join_geometry out out1 out2
+cncjob out -z_cut -2.6 -z_move 1.2 -endz 10.0 -feedrate 100 -feedrate_z 60 -dia 2 -spindlespeed 30000 -dpp 0.7 -outname outa
+write_gcode out z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/out/out.nc
+
+drillcncjob drl -drillz -3 -travelz 1 -feedrate_z 200 -toolchangez 15.0 -endxy (20.0,-20.0) -dwelltime 0.1 -diatol 5 -outname drills
+cncjob iso -z_cut -0.08 -z_move 1.2 -feedrate 240 -feedrate_z 120 -dia 0.2 -spindlespeed 30000 -outname etch
+write_gcode etch z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/out/etch.nc
+write_gcode drills z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/out/drills.nc
+write_gcode drl_cnc z:/petrilak.m/Elektronika/Projekty/KMZ/Doplnky/Sablik_kolejova_deska/IO_SPI/out/drills.nc
