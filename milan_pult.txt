@@ -1,0 +1,7 @@
+poèet LED vıstupù: 35 + 1 (kontrola mìnièe)
+
+poèet vstupù: ?
+asi:
+6x traovı souhlas (4 tlaèítka, vytaení/zmáèknutí)
+8x pøivolávací návìsti (2 vjezd, 2 odjezd, 4 volba koleje)
+= min. 14
