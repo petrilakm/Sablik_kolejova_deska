@@ -17,16 +17,13 @@
 
 byte inp         [3] = {0,0,0}; // input states for program
 byte inp_real    [3] = {0,0,0}; // real states, for debounce
-byte inp_shadow  [3] = {0,0,0};                               // shadow of inp, for calculation
-//#define outp HCdataout
+//byte inp_shadow  [3] = {0,0,0};                               // shadow of inp, for calculation
 byte outp        [64]; // output states for program
-#define outp_shadow HCdataout
-//byte outp_shadow [6] = {0,0,0,0,0,0}; // internal for sequential output propagation
+//#define outp_shadow HCdataout
 byte inp_last    [3] = {0,0,0}; // last button state, for event generation
 byte inp_event_1 [3] = {0,0,0}; // only changed from last time to active state (button pressed)
 byte inp_event_0 [3] = {0,0,0}; // only changed from last time to default state
 byte inp_cnt [20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // for debounce - all inputs
-//byte inp_hold[18] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // for hold - only normal inputs
 void (*pgenerate_events)(void) = 0; // function pointer for callback function GenerateEvents
 byte io_flag_10Hz = 0; // private
 byte io_blink_10Hz = 1; // public
@@ -154,9 +151,9 @@ void io_debounce_single(byte num, byte debounce_num)
     if (inp_cnt[num] >= debounce_num) {
       // reflect real state to shadow registers
       if (but_re) {
-        inp_shadow[pt_seg] |=  (1 << pt_b);
+        inp[pt_seg] |=  (1 << pt_b);
        } else {
-        inp_shadow[pt_seg] &= ~(1 << pt_b);
+        inp[pt_seg] &= ~(1 << pt_b);
       }
     }
    } else {
@@ -166,39 +163,52 @@ void io_debounce_single(byte num, byte debounce_num)
 }
 
 //----------------------------------------------------
+static inline void io_out_set(byte seg, byte bit)
+{
+  HCdataout[seg] |= (1 << bit);
+}
+
+//----------------------------------------------------
+static inline void io_out_unset(byte seg, byte bit)
+{
+  HCdataout[seg] &= ~(1 << bit);
+}
+
+//----------------------------------------------------
 void io_calculate_output(byte num)
 {
   byte val;
   byte pt_seg, pt_b;
 
-  pt_seg = (num >> 3);   // byte pointer
-  pt_b   = 7-(num & 0x07); // bit  pointer
+  pt_seg = (num >> 3);     // byte pointer
+  pt_b   = 7-(num & 0x07); // bit pointer
   
   val = outp[num] & 3;
 
   switch(val) {
     case 0: // off
-      HCdataout[pt_seg] &= ~(1 << pt_b);
+	  io_out_unset(pt_seg, pt_b);
       break;
     case 1: // on
-      outp_shadow[pt_seg] |= (1 << pt_b);
+	  io_out_set(pt_seg, pt_b);
       break;
-      
+
     case 2: // blink 2 Hz
       if (io_blink_2Hz) {
-        outp_shadow[pt_seg] |= (1 << pt_b);
+        io_out_set(pt_seg, pt_b);
        } else {
-        outp_shadow[pt_seg] &= ~(1 << pt_b);
+        io_out_unset(pt_seg, pt_b);
       }
       break;
+
     case 3: // blink 10 Hz
       if (io_blink_10Hz) {
-        outp_shadow[pt_seg] |= (1 << pt_b);
+        io_out_set(pt_seg, pt_b);
        } else {
-        outp_shadow[pt_seg] &= ~(1 << pt_b);
+        io_out_unset(pt_seg, pt_b);
       }
       break;
-      
+
     default:
       break;
   }
@@ -220,9 +230,9 @@ void io_loop(void)
   // C = counter in current task (0..31)
   // T = task
   // 0x00 - wait
-  // 0x20 - get real state
-  // 0x40 - debounce
-  // 0x60 - propagate results
+  // 0x40 - get real state
+  // 0x80 - debounce + calculate outputs
+  // 0xC0 - detect changes in inputs
   
   if (io_flag_10Hz) {
     io_flag_10Hz = false;
@@ -237,7 +247,6 @@ void io_loop(void)
     
     // generate 10Hz signal
     if (io_blink_10Hz) io_blink_10Hz=0; else io_blink_10Hz=1;
-    
   }
 
   num    = (io_loop_state & 0x3F); // 0 - 63
@@ -257,35 +266,20 @@ void io_loop(void)
     //io_loop_state |= 0x1F;  // end of phase
   }
 
-
-  // Task - debounce single
+  // Task - debounce single + set outputs
   if (seg == 2) {
     switch (num) {
       case  0 ... 16:
-        // set shadow outputs
         io_calculate_output(num);
-        
         io_debounce_single(num, DEBOUNCE_NUM);
-      case 17 ... 47:
+      case 17 ... 63:
         io_calculate_output(num);
-        
-        //io_debounce_single(num, DEBOUNCE_NUM);        
         break;
       default:
         io_loop_state |= 0x3F;  // end of phase
         break;
     }
   }
-/*
-  if ((seg == 3) && (subseg == 0)) {
-    inp[i] = inp_shadow[i];
-    if (i==2) io_loop_state |= 0x07;
-  }
-  if ((seg == 3) && (subseg == 1)) {
-    io_set_shadow_output(); // flush output to pins
-    if (i==0) io_loop_state |= 0x07;
-  }
-  */
   if ((seg == 3) && (subseg == 2)) {
     changes = (inp[i] ^ inp_last[i]); // detect changes
     inp_event_1[i] |= (( inp[i]) & changes); // catch transitions 0->1
