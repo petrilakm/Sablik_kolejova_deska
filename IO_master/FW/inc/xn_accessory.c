@@ -167,6 +167,7 @@ void xnacc_uart_parse_acessoryinputs(uint8_t data1, uint8_t data2)
   word num; // decoded number (external address)
   // load actual state from RS packet
       num = (data1 << 1) | ((data2 & 0b00010000) >> 4); // get module address
+      dbg = (uint8_t) num;
       // indicate successful reception if requested
       if (!xnacc_req_ok) {
         if (xnacc_req_addr == num) {

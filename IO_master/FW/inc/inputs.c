@@ -31,6 +31,18 @@ byte io_blink_2Hz = 1; // public
 byte io_blink_10Hz_cnt = 0; // private
 byte io_blink_2Hz_cnt = 0; // private
 
+//----------------------------------------------------
+static inline void io_out_set(byte seg, byte bit)
+{
+  HCdataout[seg] |= (1 << bit);
+}
+
+//----------------------------------------------------
+static inline void io_out_unset(byte seg, byte bit)
+{
+  HCdataout[seg] &= ~(1 << bit);
+}
+
 /*
 void dbg_show_byte(byte num)
 {
@@ -44,6 +56,27 @@ if (num & 0x40) PORTG |= BV(1); else PORTG &= ~BV(1);
 if (num & 0x80) PORTC |= BV(0); else PORTC &= ~BV(0);
 }
 */
+
+byte dbg_outs[8] = {16,19,17,18,46,45,47,48};
+
+void dbg_show_byte(byte val)
+{
+  byte i;
+  byte num;
+  byte pt_seg, pt_b;
+  
+  for(i=0; i<8; i++) {
+    num = dbg_outs[i];
+    pt_seg = (num >> 3);     // byte pointer
+    pt_b   = 7-(num & 0x07); // bit pointer
+    if (val & (1 << i)) {
+      io_out_set(pt_seg, pt_b);
+    } else {
+      io_out_unset(pt_seg, pt_b);
+    }
+      
+  }
+}
 
 //----------------------------------------------------
 void io_init(void)
@@ -163,18 +196,6 @@ void io_debounce_single(byte num, byte debounce_num)
 }
 
 //----------------------------------------------------
-static inline void io_out_set(byte seg, byte bit)
-{
-  HCdataout[seg] |= (1 << bit);
-}
-
-//----------------------------------------------------
-static inline void io_out_unset(byte seg, byte bit)
-{
-  HCdataout[seg] &= ~(1 << bit);
-}
-
-//----------------------------------------------------
 void io_calculate_output(byte num)
 {
   byte val;
@@ -236,6 +257,7 @@ void io_loop(void)
   
   if (io_flag_10Hz) {
     io_flag_10Hz = false;
+    //dbg_show_byte(dbg); // show one byte on L and S
     // start io sequence
     if (io_loop_state == 0) io_loop_state = 1; // start if stopped
 
@@ -260,8 +282,8 @@ void io_loop(void)
       // get real state
       //io_get_real_state(num);    // capture input state
       HCcomm();
-      inp_real[0] = HCdatain[7];
-      inp_real[1] = HCdatain[6];
+      inp_real[0] = HCdatain[0];
+      inp_real[1] = HCdatain[1];
     }
     //io_loop_state |= 0x1F;  // end of phase
   }

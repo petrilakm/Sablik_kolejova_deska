@@ -55,9 +55,9 @@ bits:
             
             ; set output pin
             sbrs      datout,0
-            cbi       HCout
-            sbrc      datout,0
             sbi       HCout
+            sbrc      datout,0
+            cbi       HCout
             ror       datout
 
             nop

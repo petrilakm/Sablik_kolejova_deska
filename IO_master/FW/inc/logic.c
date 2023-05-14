@@ -59,14 +59,14 @@ void logic_turnout_indicate(byte num, byte out)
 }
 
 //----------------------------------------------------
-void logic_nav_maketa_vjezd_indicate(word num, byte out) // výstup prvního io bloku (celkem 4), èíslo prvního výstupu (celkem 3)
+void logic_nav_maketa_vjezd_indicate(word num, byte out) // v?stup prvn?o io bloku (celkem 4), ?slo prvn?o v?stupu (celkem 3)
 {
   num--;
   byte indstate;
   if (xnacc_turnout_state[num+3] == 1) {
-    indstate = 2; // blikací návìst -> blikání 0.5 Hz
+    indstate = 2; // blikac? n??t -> blik?? 0.5 Hz
    } else {
-    indstate = 1; // normální návìst
+    indstate = 1; // norm?n? n??t
   }  
   if (xnacc_turnout_state[num+0] == 1) {
     io_set_state(out  ,1);
@@ -86,14 +86,14 @@ void logic_nav_maketa_vjezd_indicate(word num, byte out) // výstup prvního io bl
 }
 
 //----------------------------------------------------
-void logic_nav_maketa_indicate(word num, byte out) // výstup prvního io bloku (celkem 3), èíslo prvního výstupu (celkem 2)
+void logic_nav_maketa_indicate(word num, byte out) // v?stup prvn?o io bloku (celkem 3), ?slo prvn?o v?stupu (celkem 2)
 {
   num--;
   byte indstate;
   if (xnacc_turnout_state[num+2] == 1) {
-    indstate = 2; // blikací návìst -> blikání 0.5 Hz
+    indstate = 2; // blikac? n??t -> blik?? 0.5 Hz
    } else {
-    indstate = 1; // normální návìst
+    indstate = 1; // norm?n? n??t
   }  
   if (xnacc_turnout_state[num+0] == 1) {
     io_set_state(out  ,indstate);
@@ -108,7 +108,7 @@ void logic_nav_maketa_indicate(word num, byte out) // výstup prvního io bloku (c
 }
 
 //----------------------------------------------------
-void logic_indicate(word num, byte out) // výstup io bloku (xpressNET), èíslo výstupu (fyzický)
+void logic_indicate(word num, byte out) // v?stup io bloku (xpressNET), ?slo v?stupu (fyzick?)
 {
   num--;
   if (xnacc_turnout_state[num+0] == 1) {
@@ -131,77 +131,83 @@ void do_pult_logic_internal(void)
   
     case 1:
       dbg_led_s;
-      logic_nav_maketa_vjezd_indicate(base+0, 61); // L logic_nav_maketa_vjezd_indicate(first turnout address, first LED number)
+      logic_nav_maketa_vjezd_indicate(base+0, 17); // L (S) logic_nav_maketa_vjezd_indicate(first turnout address, first LED number)
       break;
     case 2:
-      logic_nav_maketa_vjezd_indicate(base+4, 58);  // S
+      logic_nav_maketa_vjezd_indicate(base+4, 45);  // S (L)
       break;
     case 3:
-      logic_nav_maketa_indicate(base+8+3*0, 50);  // L1
-      logic_nav_maketa_indicate(base+8+3*1, 40);  // L2
-      logic_nav_maketa_indicate(base+8+3*2, 17);  // L3
+      logic_nav_maketa_indicate(base+8 , 34);  // L1 (S1)
+      logic_nav_maketa_indicate(base+11, 38);  // L2 (S3)
+      logic_nav_maketa_indicate(base+14, 36);  // L3 (S2)
       break;
     case 4:
-      logic_nav_maketa_indicate(base+8+3*3,12);  // S1
-      logic_nav_maketa_indicate(base+8+3*4,14);  // S2
-      logic_nav_maketa_indicate(base+8+3*5,16);  // S3
+      logic_nav_maketa_indicate(base+17,27);  // S1 (L1)
+      logic_nav_maketa_indicate(base+20,32);  // S2 (L3)
+      logic_nav_maketa_indicate(base+23,29);  // S3 (L2)
       break;
     case 5:
-      logic_indicate(base+26, 18); // IK 1
-      logic_indicate(base+27, 19); // IK 2
+      logic_indicate(base+40, 44); // Se 1
+      logic_indicate(base+41, 16); // Pr.L (Pr.S)
+      logic_indicate(base+42, 48); // Pr.S (Pr.L)
+      logic_indicate(base+26, 43); // IK 1
+      logic_indicate(base+27, 40); // IK 2
       break;
     case 6:
-      logic_indicate(base+28, 20); // IK 3 // nejede, nevim proc 2022-11-14 (Michal Petrilak)
-      logic_indicate(base+29, 21); // IK 4
+      logic_indicate(base+28, 41); // IK 3
+      logic_indicate(base+29, 42); // IK 4
       break;
     case 7:
-      logic_indicate(base+30, 22); // IK 5
-      logic_indicate(base+31, 23); // IK 6
+      logic_indicate(base+30, 23); // IK 5
+      logic_indicate(base+31, 21); // IK 6
       break;
     case 8:
-      logic_indicate(base+32, 24); // IK 7
-      logic_indicate(base+33, 25); // IK 8
-      // 26 - porucha izol stavù - není komunikace s centrálou
+      logic_indicate(base+32, 22); // IK 7
+      logic_indicate(base+33, 20); // IK 8
+      // 26 - porucha izol stav? - nen? komunikace s centr?ou
       break;
     case 9:
-      logic_indicate(base+34, 27); // TS <- sk
-      logic_indicate(base+35, 28); // TS VT
-      logic_indicate(base+36, 29); // TS ->
+      logic_indicate(base+34, 24); // TS skPS
+      logic_indicate(base+35, 25); // TS skVT
+      logic_indicate(base+36, 26); // TS skUS
+      logic_indicate(base+37, 50); // TS <- ha
+      logic_indicate(base+38, 51); // TS VT
+      logic_indicate(base+39, 52); // TS ->
       break;
     case 12:
-      logic_indicate(base+37, 30); // TS <- ha
-      logic_indicate(base+38, 31); // TS VT
-      logic_indicate(base+39, 32); // TS ->
+      logic_indicate(base+43, 53); // P?iv nav S1-S3 (L1-L3)
+      logic_indicate(base+44, 54); // P?iv nav L1-L3 (S1-S3)
+      logic_indicate(base+45, 55); // Dohliad izol. stavu
       break;
       
     case 13:
-      if (io_get_change_on(0)) xnacc_turnout_action(base+48, 0); // button 0 operate turnout 549 to position - (RM 138)
-	  if (io_get_change_on(1)) xnacc_turnout_action(base+49, 0); // button 1 operate turnout 550 to position - (RM 138)
-	  if (io_get_change_on(2)) xnacc_turnout_action(base+50, 0); // button 2 operate turnout 551 to position - (RM 138)
-	  if (io_get_change_on(3)) xnacc_turnout_action(base+51, 0); // button 3 operate turnout 552 to position - (RM 138)
-	  if (io_get_change_on(4)) xnacc_turnout_action(base+52, 0); // button 4 operate turnout 553 to position - (RM 139)
+      if (io_get_change_on(0)) xnacc_turnout_action(201, 0); // button 0 operate turnout 549 to position - (RM 138)
+	  if (io_get_change_on(7)) xnacc_turnout_action(202, 0); // button 1 operate turnout 550 to position - (RM 138)
+	  if (io_get_change_on(1)) xnacc_turnout_action(203, 0); // button 2 operate turnout 551 to position - (RM 138)
+	  if (io_get_change_on(6)) xnacc_turnout_action(204, 0); // button 3 operate turnout 552 to position - (RM 138)
+	  if (io_get_change_on(2)) xnacc_turnout_action(205, 0); // button 4 operate turnout 553 to position - (RM 139)
       break;
     case 14:
-	  if (io_get_change_off(0)) xnacc_turnout_action(base+48, 1); // button 0 operate turnout 549 to position +
-	  if (io_get_change_off(1)) xnacc_turnout_action(base+49, 1); // button 1 operate turnout 550 to position +
-	  if (io_get_change_off(2)) xnacc_turnout_action(base+50, 1); // button 2 operate turnout 551 to position +
-	  if (io_get_change_off(3)) xnacc_turnout_action(base+51, 1); // button 3 operate turnout 552 to position +
-	  if (io_get_change_off(4)) xnacc_turnout_action(base+52, 1); // button 4 operate turnout 553 to position +
+	  if (io_get_change_off(0)) xnacc_turnout_action(201, 1); // button 0 operate turnout 549 to position +
+	  if (io_get_change_off(7)) xnacc_turnout_action(202, 1); // button 1 operate turnout 550 to position +
+	  if (io_get_change_off(1)) xnacc_turnout_action(203, 1); // button 2 operate turnout 551 to position +
+	  if (io_get_change_off(6)) xnacc_turnout_action(204, 1); // button 3 operate turnout 552 to position +
+	  if (io_get_change_off(2)) xnacc_turnout_action(205, 1); // button 4 operate turnout 553 to position +
       //if (xnacc_turnout_state[500]) dbg_led_1; else dbg_led_0;
       break;
     case 15:
-      if (io_get_change_on(5)) xnacc_turnout_action(base+53, 0); // button 0 operate turnout 554 to position - (RM 139)
-	  if (io_get_change_on(6)) xnacc_turnout_action(base+54, 0); // button 1 operate turnout 555 to position - (RM 139)
-	  if (io_get_change_on(7)) xnacc_turnout_action(base+55, 0); // button 2 operate turnout 556 to position - (RM 139)
-	  if (io_get_change_on(8)) xnacc_turnout_action(base+56, 0); // button 3 operate turnout 557 to position - (RM 140)
-	  if (io_get_change_on(9)) xnacc_turnout_action(base+57, 0); // button 4 operate turnout 558 to position - (RM 140)
+      if (io_get_change_on(5)) xnacc_turnout_action(206, 0); // button 0 operate turnout 554 to position - (RM 139)
+	  if (io_get_change_on(3)) xnacc_turnout_action(207, 0); // button 1 operate turnout 555 to position - (RM 139)
+	  if (io_get_change_on(4)) xnacc_turnout_action(208, 0); // button 2 operate turnout 556 to position - (RM 139)
+	  if (io_get_change_on(8)) xnacc_turnout_action(209, 0); // button 3 operate turnout 557 to position - (RM 140)
+	  if (io_get_change_on(15)) xnacc_turnout_action(210, 0); // button 4 operate turnout 558 to position - (RM 140)
       break;
 	case 16:
-      if (io_get_change_off(5)) xnacc_turnout_action(base+53, 1); // button 0 operate turnout 554 to position +
-	  if (io_get_change_off(6)) xnacc_turnout_action(base+54, 1); // button 1 operate turnout 555 to position +
-	  if (io_get_change_off(7)) xnacc_turnout_action(base+55, 1); // button 2 operate turnout 556 to position +
-	  if (io_get_change_off(8)) xnacc_turnout_action(base+56, 1); // button 3 operate turnout 557 to position + (RM 140)
-	  if (io_get_change_off(9)) xnacc_turnout_action(base+57, 1); // button 4 operate turnout 558 to position + (RM 140)
+      if (io_get_change_off(5)) xnacc_turnout_action(206, 1); // button 0 operate turnout 554 to position +
+	  if (io_get_change_off(3)) xnacc_turnout_action(207, 1); // button 1 operate turnout 555 to position +
+	  if (io_get_change_off(4)) xnacc_turnout_action(208, 1); // button 2 operate turnout 556 to position +
+	  if (io_get_change_off(8)) xnacc_turnout_action(209, 1); // button 3 operate turnout 557 to position + (RM 140)
+	  if (io_get_change_off(15)) xnacc_turnout_action(210, 1); // button 4 operate turnout 558 to position + (RM 140)
       break;
     default:
       asm("nop");
@@ -225,22 +231,22 @@ void do_pult_logic(void)
     // count inittimer
     if (logic_inittimer > 0) logic_inittimer--;
 
-    //timer po zapnutí  // 78
+    //timer po zapnut?  // 78
     //if (logic_inittimer == 70) xnacc_trackpower_request(); // dotaz sa stav DCC
-    //if (logic_inittimer == 24) xnacc_feedback_request(4);  // dotaz na pøestávník s adresou 4
+    //if (logic_inittimer == 24) xnacc_feedback_request(4);  // dotaz na p?est?n? s adresou 4
     //if (logic_inittimer == 20) xnacc_feedback_request(5);
     //if (logic_inittimer == 16) xnacc_feedback_request(7);
     //if (logic_inittimer == 12) xnacc_feedback_request(9);  
     //if (logic_inittimer == 18) xnacc_feedback_request(11);
-//     if (logic_inittimer == 40) {                           // pokud máme stavy, tak neprovádìj sekvenci dále 
+//     if (logic_inittimer == 40) {                           // pokud m?e stavy, tak neprov?? sekvenci d?e 
 //       byte sum = 0;
 //       byte i;
 //       for(i = 0; i < 20; i++) {
 //         sum += xnacc_turnout_state[i];
 //       }
-//       if (sum > 4) logic_inittimer = 0; // pokud máme nìjaký stav, tak pøestaneme s inicializací (centrála není po restartu)
+//       if (sum > 4) logic_inittimer = 0; // pokud m?e n?ak? stav, tak p?estaneme s inicializac? (centr?a nen? po restartu)
 //     }
-//     if (logic_inittimer == 35) xnacc_turnout_action(4, 1); // nastavit pøestavník s adresou 4 do +
+//     if (logic_inittimer == 35) xnacc_turnout_action(4, 1); // nastavit p?estavn? s adresou 4 do +
 //     if (logic_inittimer == 30) xnacc_turnout_action(5, 1);
 //     if (logic_inittimer == 25) xnacc_turnout_action(7, 1);
 //     if (logic_inittimer == 20) xnacc_turnout_action(9, 1);
@@ -255,9 +261,9 @@ void do_pult_logic(void)
   if (!xnacc_ccavail) {
     logic_inittimer = 80;
     // command center is not available (no communication)
-    io_set_state(26,3);    
+    io_set_state(49,3);    
   } else {
-    io_set_state(26,0);
+    io_set_state(49,0);
   }
 }
 
