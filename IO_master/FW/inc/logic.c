@@ -182,32 +182,32 @@ void do_pult_logic_internal(void)
       
     case 13:
       if (io_get_change_on(0)) xnacc_turnout_action(201, 0); // button 0 operate turnout 549 to position - (RM 138)
-	  if (io_get_change_on(7)) xnacc_turnout_action(202, 0); // button 1 operate turnout 550 to position - (RM 138)
-	  if (io_get_change_on(1)) xnacc_turnout_action(203, 0); // button 2 operate turnout 551 to position - (RM 138)
-	  if (io_get_change_on(6)) xnacc_turnout_action(204, 0); // button 3 operate turnout 552 to position - (RM 138)
-	  if (io_get_change_on(2)) xnacc_turnout_action(205, 0); // button 4 operate turnout 553 to position - (RM 139)
+  	  if (io_get_change_on(7)) xnacc_turnout_action(202, 0); // button 1 operate turnout 550 to position - (RM 138)
+  	  if (io_get_change_on(1)) xnacc_turnout_action(203, 0); // button 2 operate turnout 551 to position - (RM 138)
+  	  if (io_get_change_on(6)) xnacc_turnout_action(204, 0); // button 3 operate turnout 552 to position - (RM 138)
+  	  if (io_get_change_on(2)) xnacc_turnout_action(205, 0); // button 4 operate turnout 553 to position - (RM 139)
       break;
     case 14:
-	  if (io_get_change_off(0)) xnacc_turnout_action(201, 1); // button 0 operate turnout 549 to position +
-	  if (io_get_change_off(7)) xnacc_turnout_action(202, 1); // button 1 operate turnout 550 to position +
-	  if (io_get_change_off(1)) xnacc_turnout_action(203, 1); // button 2 operate turnout 551 to position +
-	  if (io_get_change_off(6)) xnacc_turnout_action(204, 1); // button 3 operate turnout 552 to position +
-	  if (io_get_change_off(2)) xnacc_turnout_action(205, 1); // button 4 operate turnout 553 to position +
+  	  if (io_get_change_off(0)) xnacc_turnout_action(201, 1); // button 0 operate turnout 549 to position +
+  	  if (io_get_change_off(7)) xnacc_turnout_action(202, 1); // button 1 operate turnout 550 to position +
+  	  if (io_get_change_off(1)) xnacc_turnout_action(203, 1); // button 2 operate turnout 551 to position +
+  	  if (io_get_change_off(6)) xnacc_turnout_action(204, 1); // button 3 operate turnout 552 to position +
+  	  if (io_get_change_off(2)) xnacc_turnout_action(205, 1); // button 4 operate turnout 553 to position +
       //if (xnacc_turnout_state[500]) dbg_led_1; else dbg_led_0;
       break;
     case 15:
       if (io_get_change_on(5)) xnacc_turnout_action(206, 0); // button 0 operate turnout 554 to position - (RM 139)
-	  if (io_get_change_on(3)) xnacc_turnout_action(207, 0); // button 1 operate turnout 555 to position - (RM 139)
-	  if (io_get_change_on(4)) xnacc_turnout_action(208, 0); // button 2 operate turnout 556 to position - (RM 139)
-	  if (io_get_change_on(8)) xnacc_turnout_action(209, 0); // button 3 operate turnout 557 to position - (RM 140)
-	  if (io_get_change_on(15)) xnacc_turnout_action(210, 0); // button 4 operate turnout 558 to position - (RM 140)
+	    if (io_get_change_on(3)) xnacc_turnout_action(207, 0); // button 1 operate turnout 555 to position - (RM 139)
+	    if (io_get_change_on(4)) xnacc_turnout_action(208, 0); // button 2 operate turnout 556 to position - (RM 139)
+	    if (io_get_change_on(8)) xnacc_turnout_action(209, 0); // button 3 operate turnout 557 to position - (RM 140)
+	    if (io_get_change_on(15)) xnacc_turnout_action(210, 0); // button 4 operate turnout 558 to position - (RM 140)
       break;
 	case 16:
       if (io_get_change_off(5)) xnacc_turnout_action(206, 1); // button 0 operate turnout 554 to position +
-	  if (io_get_change_off(3)) xnacc_turnout_action(207, 1); // button 1 operate turnout 555 to position +
-	  if (io_get_change_off(4)) xnacc_turnout_action(208, 1); // button 2 operate turnout 556 to position +
-	  if (io_get_change_off(8)) xnacc_turnout_action(209, 1); // button 3 operate turnout 557 to position + (RM 140)
-	  if (io_get_change_off(15)) xnacc_turnout_action(210, 1); // button 4 operate turnout 558 to position + (RM 140)
+  	  if (io_get_change_off(3)) xnacc_turnout_action(207, 1); // button 1 operate turnout 555 to position +
+  	  if (io_get_change_off(4)) xnacc_turnout_action(208, 1); // button 2 operate turnout 556 to position +
+  	  if (io_get_change_off(8)) xnacc_turnout_action(209, 1); // button 3 operate turnout 557 to position + (RM 140)
+  	  if (io_get_change_off(15)) xnacc_turnout_action(210, 1); // button 4 operate turnout 558 to position + (RM 140)
       break;
     default:
       asm("nop");
@@ -230,28 +230,18 @@ void do_pult_logic(void)
 
     // count inittimer
     if (logic_inittimer > 0) logic_inittimer--;
-
-    //timer po zapnut?  // 78
-    //if (logic_inittimer == 70) xnacc_trackpower_request(); // dotaz sa stav DCC
-    //if (logic_inittimer == 24) xnacc_feedback_request(4);  // dotaz na p?est?n? s adresou 4
-    //if (logic_inittimer == 20) xnacc_feedback_request(5);
-    //if (logic_inittimer == 16) xnacc_feedback_request(7);
-    //if (logic_inittimer == 12) xnacc_feedback_request(9);  
-    //if (logic_inittimer == 18) xnacc_feedback_request(11);
-//     if (logic_inittimer == 40) {                           // pokud m?e stavy, tak neprov?? sekvenci d?e 
-//       byte sum = 0;
-//       byte i;
-//       for(i = 0; i < 20; i++) {
-//         sum += xnacc_turnout_state[i];
-//       }
-//       if (sum > 4) logic_inittimer = 0; // pokud m?e n?ak? stav, tak p?estaneme s inicializac? (centr?a nen? po restartu)
-//     }
-//     if (logic_inittimer == 35) xnacc_turnout_action(4, 1); // nastavit p?estavn? s adresou 4 do +
-//     if (logic_inittimer == 30) xnacc_turnout_action(5, 1);
-//     if (logic_inittimer == 25) xnacc_turnout_action(7, 1);
-//     if (logic_inittimer == 20) xnacc_turnout_action(9, 1);
-//     if (logic_inittimer == 15) xnacc_turnout_action(11, 1);
-//     
+      if (logic_inittimer == 1) {
+        xnacc_turnout_action(201, 1); // nastavit prestavník s adresou 201 do + (tlačítko nezmáčknuté)
+        xnacc_turnout_action(202, 1);
+        xnacc_turnout_action(203, 1);
+        xnacc_turnout_action(204, 1);
+        xnacc_turnout_action(205, 1);
+        xnacc_turnout_action(206, 1);
+        xnacc_turnout_action(207, 1);
+        xnacc_turnout_action(208, 1);
+        xnacc_turnout_action(209, 1);
+        xnacc_turnout_action(210, 1);
+      }
   }
   
   if (xnacc_ccavail) {
@@ -259,7 +249,7 @@ void do_pult_logic(void)
   }
     
   if (!xnacc_ccavail) {
-    logic_inittimer = 80;
+    logic_inittimer = 10;
     // command center is not available (no communication)
     io_set_state(49,3);    
   } else {
