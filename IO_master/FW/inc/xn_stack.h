@@ -7,7 +7,7 @@
 #include "xpressnet.h"
 
 // set constants
-#define XNS_SIZE (16)
+#define XNS_SIZE (32)
 // delay betweeb two messages in queue 1 = receiver one inquiry msg, 10 = received 10x inquiry messages
 #define XNS_MESSAGES_TIMESTEP (15)
 

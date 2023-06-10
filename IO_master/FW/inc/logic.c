@@ -236,15 +236,29 @@ void do_pult_logic(void)
         xnacc_feedback_request(501+i);
       }
     }
-    if (logic_inittimer == 20) {
+    if (logic_inittimer == 28) {
+      if (!xns_empty_queue()) {
+        logic_inittimer++; // wait here
+      }
+    }
+    if (logic_inittimer == 26) {
       for(i=0; i<20; i+=2) {
         xnacc_feedback_request(521+i);
       }
-
     }
-    if (logic_inittimer == 10) {
+    if (logic_inittimer == 14) {
+      if (!xns_empty_queue()) {
+        logic_inittimer++; // wait here
+      }
+    }
+    if (logic_inittimer == 12) {
       for(i=0; i<8; i+=2) {
         xnacc_feedback_request(541+i);
+      }
+    }
+    if (logic_inittimer == 10) {
+      if (!xns_empty_queue()) {
+        logic_inittimer++; // wait here
       }
     }
     if (logic_inittimer == 1) {
@@ -259,7 +273,7 @@ void do_pult_logic(void)
   }
     
   if (!xnacc_ccavail) {
-    logic_inittimer = 80;
+    logic_inittimer = 40;
     // command center is not available (no communication)
     io_set_state(49,3);    
   } else {
