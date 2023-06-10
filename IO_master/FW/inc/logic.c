@@ -191,7 +191,7 @@ void do_pult_logic_internal(void)
   	  if (io_get_change_off(0)) xnacc_turnout_action(201, 1); // button 0 operate turnout 549 to position +
   	  if (io_get_change_off(7)) xnacc_turnout_action(202, 1); // button 1 operate turnout 550 to position +
   	  if (io_get_change_off(1)) xnacc_turnout_action(203, 1); // button 2 operate turnout 551 to position +
-  	  if (io_get_change_off(6)) xnacc_turnout_action(204, 1); // button 3 operate turnout 552 to position +
+      if (io_get_change_off(6)) xnacc_turnout_action(204, 1); // button 3 operate turnout 552 to position +
   	  if (io_get_change_off(2)) xnacc_turnout_action(205, 1); // button 4 operate turnout 553 to position +
       //if (xnacc_turnout_state[500]) dbg_led_1; else dbg_led_0;
       break;
@@ -221,6 +221,7 @@ void do_pult_logic_internal(void)
 //----------------------------------------------------
 void do_pult_logic(void)
 {
+  int i;
   if (logic_flag_10Hz) {
     logic_flag_10Hz = false;
     // start logic state machine
@@ -230,18 +231,27 @@ void do_pult_logic(void)
 
     // count inittimer
     if (logic_inittimer > 0) logic_inittimer--;
-      if (logic_inittimer == 1) {
-        xnacc_turnout_action(201, 1); // nastavit prestavník s adresou 201 do + (tlačítko nezmáčknuté)
-        xnacc_turnout_action(202, 1);
-        xnacc_turnout_action(203, 1);
-        xnacc_turnout_action(204, 1);
-        xnacc_turnout_action(205, 1);
-        xnacc_turnout_action(206, 1);
-        xnacc_turnout_action(207, 1);
-        xnacc_turnout_action(208, 1);
-        xnacc_turnout_action(209, 1);
-        xnacc_turnout_action(210, 1);
+    if (logic_inittimer == 30) {
+      for(i=0; i<20; i+=2) {
+        xnacc_feedback_request(501+i);
       }
+    }
+    if (logic_inittimer == 20) {
+      for(i=0; i<20; i+=2) {
+        xnacc_feedback_request(521+i);
+      }
+
+    }
+    if (logic_inittimer == 10) {
+      for(i=0; i<8; i+=2) {
+        xnacc_feedback_request(541+i);
+      }
+    }
+    if (logic_inittimer == 1) {
+      for(i=0; i<11; i++) {
+        xnacc_turnout_action(201+i, 1);
+      }
+    }
   }
   
   if (xnacc_ccavail) {
@@ -249,7 +259,7 @@ void do_pult_logic(void)
   }
     
   if (!xnacc_ccavail) {
-    logic_inittimer = 10;
+    logic_inittimer = 80;
     // command center is not available (no communication)
     io_set_state(49,3);    
   } else {
